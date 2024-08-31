@@ -1,0 +1,7 @@
+node_modules/
+
+.env
+
+config/fullstack-challenge-5a3f1-firebase-adminsdk-9srrl-98b4b4f17d.json
+
+dist/
