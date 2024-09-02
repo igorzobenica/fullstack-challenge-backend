@@ -1,19 +1,9 @@
 import express from 'express';
-import admin from 'firebase-admin';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import path from 'path';
+import { auth } from './config/firebase';
 
 dotenv.config();
-
-const serviceAccount = require(path.join(__dirname, '../config/firebase-service-account.json'));
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: process.env.FIREBASE_DB_URL,
-});
-
-const db = admin.firestore();
 
 const app = express();
 
@@ -24,9 +14,9 @@ app.get('/', (req, res) => {
   res.send('Hello from Firebase Backend!');
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-export { db };
+export { auth };
