@@ -5,10 +5,8 @@ export const saveProfile = async (req: Request, res: Response): Promise<void> =>
   const { name, email } = req.body;
   const phoneNumber = req.user.phone_number;
 
-  if (!name || !email || !phoneNumber) {
-    res.status(400).json({
-      message: "Missing fields: name, email, or phone number",
-    });
+  if (!name || !email) {
+    res.status(400).json({ message: "Name and email are required" });
     return;
   }
 

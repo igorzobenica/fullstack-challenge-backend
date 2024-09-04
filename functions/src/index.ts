@@ -1,20 +1,16 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import { onRequest } from "firebase-functions/v2/https";
+import express from "express";
+import { saveProfile, getProfile } from "./controllers/profileController";
+import corsHandler from "./middlewares/corsMiddleware";
+import authMiddleware from "./middlewares/authMiddleware";
 
-// import {onRequest} from "firebase-functions/v2/https";
-// import * as logger from "firebase-functions/logger";
+const app = express();
+app.use(express.json());
 
-export {saveProfileHttp, getProfileHttp} from "./routes/profileRoutes";
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+app.use(corsHandler);
+app.use(authMiddleware);
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+app.post("/profile", saveProfile);
+app.get("/profile", getProfile);
+
+exports.app = onRequest(app)
