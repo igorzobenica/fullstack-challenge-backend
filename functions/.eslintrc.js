@@ -20,11 +20,12 @@ module.exports = {
     sourceType: 'module',
   },
   ignorePatterns: ['/lib/**/*', '/generated/**/*'],
-  plugins: ['@typescript-eslint', 'import'],
+  plugins: ['@typescript-eslint', 'import', 'prettier'],
   rules: {
     quotes: ['error', 'single'],
     'import/no-unresolved': 0,
     indent: ['error', 2],
     'quote-props': ['off'],
+    'prettier/prettier': 'error',
   },
 }
