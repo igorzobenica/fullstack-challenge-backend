@@ -1,32 +1,34 @@
-import { Request, Response, NextFunction } from "express";
-import { auth } from "../utils/firebase";
-
-interface CustomRequest extends Request {
-  user?: any;
-}
+import {CustomRequest} from "../types/CustomRequest";
+import {Response, NextFunction} from "express";
+import {auth} from "../utils/firebase";
 
 const authMiddleware = async (
   req: CustomRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const idToken = req.headers.authorization?.split("Bearer ")[1];
+  const authorizationHeader = req.headers.authorization;
 
-  if (!idToken) {
-    return res.status(401).json({ message: "Unauthorized: No token provided" });
+  if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+    res.status(401).json({message: "Unauthorized: No token provided"});
+    return;
   }
+
+  const idToken = authorizationHeader.split("Bearer ")[1];
 
   try {
     const decodedToken = await auth.verifyIdToken(idToken);
+
     req.user = decodedToken;
-    console.log("User authenticated", decodedToken);
+
     next();
+    return;
   } catch (error) {
     console.error("Error verifying token:", error);
-    return res.status(401).json({ message: "Unauthorized: Invalid token" });
-  }
 
-  return;
+    res.status(401).json({message: "Unauthorized: Invalid or expired token"});
+    return;
+  }
 };
 
 export default authMiddleware;

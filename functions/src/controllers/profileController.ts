@@ -1,33 +1,40 @@
-import {Request, Response} from "firebase-functions";
+import {Response} from "express";
+import {CustomRequest} from "../types/CustomRequest";
 import {db} from "../utils/firebase";
 
-export const saveProfile = async (req: Request, res: Response): Promise<void> => {
-  const { name, email } = req.body;
+export const saveProfile = async (
+  req: CustomRequest,
+  res: Response
+): Promise<void> => {
+  const {name, email} = req.body;
   const phoneNumber = req.user.phone_number;
 
   if (!name || !email) {
-    res.status(400).json({ message: "Name and email are required" });
+    res.status(400).json({message: "Name and email are required"});
     return;
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    res.status(400).json({ message: "Invalid email format" });
+    res.status(400).json({message: "Invalid email format"});
     return;
   }
 
   try {
     const userRef = db.collection("users").doc(phoneNumber);
-    await userRef.set({ name, email });
+    await userRef.set({name, email});
 
-    res.status(200).json({ message: "Profile saved successfully" });
+    res.status(200).json({message: "Profile saved successfully"});
   } catch (error) {
     console.error("Error saving profile:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({message: "Internal server error"});
   }
 };
 
-export const getProfile = async (req: Request, res: Response): Promise<void> => {
+export const getProfile = async (
+  req: CustomRequest,
+  res: Response
+): Promise<void> => {
   const phoneNumber = req.user.phone_number;
 
   try {
@@ -37,10 +44,10 @@ export const getProfile = async (req: Request, res: Response): Promise<void> => 
     if (doc.exists) {
       res.status(200).json(doc.data());
     } else {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({message: "User not found"});
     }
   } catch (error) {
     console.error("Error retrieving profile:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({message: "Internal server error"});
   }
 };
