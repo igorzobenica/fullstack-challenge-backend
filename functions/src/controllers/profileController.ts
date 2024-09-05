@@ -44,7 +44,7 @@ export const getProfile = async (
     if (doc.exists) {
       res.status(200).json(doc.data())
     } else {
-      res.status(404).json({ message: 'User not found' })
+      res.status(200).json({ message: 'No user found', user: null })
     }
   } catch (error) {
     console.error('Error retrieving profile:', error)
