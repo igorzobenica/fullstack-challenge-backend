@@ -8,3 +8,5 @@ typings/
 # Node.js dependency directory
 node_modules/
 *.local
+
+config/fullstack-challenge-5a3f1-90a715e294fd.json

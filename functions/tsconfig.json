@@ -7,8 +7,10 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["node", "jest"]
   },
   "compileOnSave": true,
-  "include": ["src"]
+  "include": ["src", "test"]
+
 }
